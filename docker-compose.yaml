@@ -19,11 +19,6 @@ services:
       - "no-new-privileges:true"
     image: rustfs/rustfs:latest
     container_name: rustfs-server
-    build:
-      context: .
-      dockerfile: Dockerfile.source
-      args:
-        TARGETPLATFORM: linux/amd64
     ports:
       - "9000:9000" # S3 API port
       - "9001:9001" # Console port
@@ -256,7 +251,7 @@ services:
       - "443:443"
     volumes:
       - ./.docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./.docker/nginx/ssl:/etc/nginx/ssl:ro
+      #- ./.docker/nginx/ssl:/etc/nginx/ssl:ro
     tmpfs:
       - /var/run
       - /var/cache/nginx
