@@ -102,6 +102,27 @@ services:
       start_period: 40s
     profiles:
       - dev
+  spark-master:
+    image: docker.io/bitnami/spark:latest
+    container_name: spark-master
+    environment:
+      - SPARK_MODE=master
+    ports:
+      - '8080:8080' # Spark Master Web UI
+      - '7077:7077' # Spark Master internal communication
+    networks:
+      - rustfs-network
+
+  spark-worker:
+    image: docker.io/bitnami/spark:latest
+    container_name: spark-worker-1
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark-master:7077
+    depends_on:
+      - spark-master
+    networks:
+      - rustfs-network
 
   # --- Observability Stack ---
 
