@@ -125,7 +125,18 @@ services:
       - rustfs-network
 
   # --- Observability Stack ---
-
+  postgres-db:
+    image: postgres:16 # Use a specific, recent version of the official Postgres image
+    container_name: my_postgres_container
+    restart: always
+    environment:
+      POSTGRES_USER: myuser # The PostgreSQL user
+      POSTGRES_PASSWORD: mypassword # The PostgreSQL password
+      POSTGRES_DB: mydatabase # Optional: creates a database with this name on initialization
+    ports:
+      - "5432:5432" # Maps port 5432 on the host to port 5432 in the container
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
   tempo-init:
     image: busybox:latest
     command: [ "sh", "-c", "chown -R 10001:10001 /var/tempo" ]
@@ -296,6 +307,8 @@ networks:
         - subnet: 172.20.0.0/16
 
 volumes:
+  postgres_data:
+    driver: local
   rustfs_data_0:
     driver: local
   rustfs_data_1:
